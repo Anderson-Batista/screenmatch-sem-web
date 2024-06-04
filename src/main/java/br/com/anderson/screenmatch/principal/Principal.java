@@ -3,6 +3,7 @@ package br.com.anderson.screenmatch.principal;
 import br.com.anderson.screenmatch.model.DadosEpisodio;
 import br.com.anderson.screenmatch.model.DadosSerie;
 import br.com.anderson.screenmatch.model.DadosTemporada;
+import br.com.anderson.screenmatch.model.Serie;
 import br.com.anderson.screenmatch.service.ConsumoApi;
 import br.com.anderson.screenmatch.service.ConverteDados;
 import org.springframework.lang.NonNull;
@@ -83,7 +84,15 @@ public class Principal {
     }
 
     private void listarSeriesBuscadas() {
-        dadosSeries.forEach(System.out::println);
+
+        List<Serie> series = new ArrayList<>();
+        series = dadosSeries.stream()
+                .map(d -> new Serie(d))
+                .collect(Collectors.toList());
+
+        series.stream()
+                .sorted(Comparator.comparing(Serie::getGenero))
+                .forEach(System.out::println);
     }
 }
 
