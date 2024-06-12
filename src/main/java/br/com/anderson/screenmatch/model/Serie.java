@@ -1,8 +1,9 @@
 package br.com.anderson.screenmatch.model;
 
-import br.com.anderson.screenmatch.service.ConsultaChatGPT;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.OptionalDouble;
 
 @Entity
@@ -13,13 +14,17 @@ public class Serie {
     private Long id;
     @Column(unique = true)
     private String titulo;
-    private  Integer totalTemporadas;
-    private  Double avaliacao;
+    private Integer totalTemporadas;
+    private Double avaliacao;
     @Enumerated(EnumType.STRING)
-    private  Categoria genero;
-    private  String atores;
-    private  String poster;
-    private  String sinopse;
+    private Categoria genero;
+    private String atores;
+    private String poster;
+    private String sinopse;
+
+    @Transient
+    private List episodios = new ArrayList<>();
+
 
     public Serie() {
     }
@@ -38,9 +43,11 @@ public class Serie {
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
+
     public String getTitulo() {
         return titulo;
     }
@@ -97,15 +104,23 @@ public class Serie {
         this.sinopse = sinopse;
     }
 
+    public List getEpisodios() {
+        return episodios;
+    }
+
+    public void setEpisodios(List episodios) {
+        this.episodios = episodios;
+    }
+
     @Override
     public String toString() {
         return
                 "genero=" + genero +
-                ", titulo='" + titulo + '\'' +
-                ", totalTemporadas=" + totalTemporadas +
-                ", avaliacao=" + avaliacao +
-                ", atores='" + atores + '\'' +
-                ", poster='" + poster + '\'' +
-                ", sinopse='" + sinopse + '\'';
+                        ", titulo='" + titulo + '\'' +
+                        ", totalTemporadas=" + totalTemporadas +
+                        ", avaliacao=" + avaliacao +
+                        ", atores='" + atores + '\'' +
+                        ", poster='" + poster + '\'' +
+                        ", sinopse='" + sinopse + '\'';
     }
 }

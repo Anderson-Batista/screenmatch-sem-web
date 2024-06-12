@@ -1,17 +1,16 @@
 package br.com.anderson.screenmatch.principal;
 
-import br.com.anderson.screenmatch.model.DadosEpisodio;
 import br.com.anderson.screenmatch.model.DadosSerie;
 import br.com.anderson.screenmatch.model.DadosTemporada;
 import br.com.anderson.screenmatch.model.Serie;
+import br.com.anderson.screenmatch.repository.SerieRepository;
 import br.com.anderson.screenmatch.service.ConsumoApi;
 import br.com.anderson.screenmatch.service.ConverteDados;
-import org.springframework.lang.NonNull;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Scanner;
 
 public class Principal {
 
@@ -23,7 +22,13 @@ public class Principal {
     private final String API_KEY = "&apikey=7b20d9dd";
     private List<DadosSerie> dadosSeries = new ArrayList<>();
 
-    public void exibMenu(){
+    private SerieRepository repository;
+
+    public Principal(SerieRepository repository) {
+        this.repository = repository;
+    }
+
+    public void exibMenu() {
         var opcao = -1;
         while (opcao != 0) {
             var menu = """
@@ -59,14 +64,16 @@ public class Principal {
 
     private void buscarSerieWeb() {
         DadosSerie dados = getDadosSerie();
-        dadosSeries.add(dados);
+        Serie serie = new Serie(dados);
+        //dadosSeries.add(dados);
+        repository.save(serie);
         System.out.println(dados);
     }
 
     private DadosSerie getDadosSerie() {
         System.out.println("Digite o nome da série para busca");
         var nomeSerie = leitura.nextLine();
-        var json = consumo.obterDados(ENDERECO + nomeSerie.replace(" ", "+")+ API_KEY);
+        var json = consumo.obterDados(ENDERECO + nomeSerie.replace(" ", "+") + API_KEY);
         DadosSerie dados = conversor.obterDados(json, DadosSerie.class);
         return dados;
     }
@@ -85,11 +92,7 @@ public class Principal {
 
     private void listarSeriesBuscadas() {
 
-        List<Serie> series = new ArrayList<>();
-        series = dadosSeries.stream()
-                .map(d -> new Serie(d))
-                .collect(Collectors.toList());
-
+        List<Serie> series = repository.findAll();
         series.stream()
                 .sorted(Comparator.comparing(Serie::getGenero))
                 .forEach(System.out::println);
