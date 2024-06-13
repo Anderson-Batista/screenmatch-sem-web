@@ -1,5 +1,6 @@
 package br.com.anderson.screenmatch.model;
 
+import br.com.anderson.screenmatch.principal.Episodio;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ public class Serie {
     private String poster;
     private String sinopse;
 
-    @Transient
+    @OneToMany(targetEntity = Episodio.class)
     private List episodios = new ArrayList<>();
 
 

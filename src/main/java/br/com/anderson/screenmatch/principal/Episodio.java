@@ -1,16 +1,29 @@
 package br.com.anderson.screenmatch.principal;
 
 import br.com.anderson.screenmatch.model.DadosEpisodio;
+import br.com.anderson.screenmatch.model.Serie;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
+@Entity
+@Table(name = "episodios")
 public class Episodio {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private Integer temporada;
     private String titulo;
     private Integer numeroEpisodio;
     private Double avaliacao;
     private LocalDate dataLancamento;
+
+    @ManyToOne()
+    private Serie serie;
+
+    public Episodio(){
+    }
 
     public Episodio(Integer numeroTemporada, DadosEpisodio dadosEpisodio) {
         this.temporada = numeroTemporada;
@@ -32,6 +45,22 @@ public class Episodio {
 
     public Integer getTemporada() {
         return temporada;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Serie getSerie() {
+        return serie;
+    }
+
+    public void setSerie(Serie serie) {
+        this.serie = serie;
     }
 
     public void setTemporada(Integer temporada) {
@@ -69,6 +98,8 @@ public class Episodio {
     public void setDataLancamento(LocalDate dataLancamento) {
         this.dataLancamento = dataLancamento;
     }
+
+
 
     @Override
     public String toString() {
