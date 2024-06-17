@@ -23,9 +23,8 @@ public class Serie {
     private String poster;
     private String sinopse;
 
-    @OneToMany(targetEntity = Episodio.class)
-    private List episodios = new ArrayList<>();
-
+    @OneToMany(mappedBy = "serie", cascade = CascadeType.ALL)
+    private List<Episodio> episodios;
 
     public Serie() {
     }
