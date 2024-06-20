@@ -1,5 +1,6 @@
 package br.com.anderson.screenmatch.principal;
 
+import br.com.anderson.screenmatch.model.Categoria;
 import br.com.anderson.screenmatch.model.DadosSerie;
 import br.com.anderson.screenmatch.model.DadosTemporada;
 import br.com.anderson.screenmatch.model.Serie;
@@ -38,6 +39,7 @@ public class Principal {
                     4 - Buscar série por título
                     5 - Buscar séries por ator
                     6 - Top 5 séries
+                    7 - Buscar séries por categoria
                                     
                     0 - Sair
                     """;
@@ -64,6 +66,9 @@ public class Principal {
                     break;
                 case 6:
                     buscarTopCincoSeries();
+                    break;
+                case 7:
+                    buscarSeriePorCategoria();
                     break;
                 case 0:
                     System.out.println("Saindo...");
@@ -154,6 +159,15 @@ public class Principal {
         List<Serie> serieTop = repository.findTopCincoByOrderByAvaliacaoDesc();
         serieTop.forEach(s ->
                         System.out.println(s.getTitulo() + " Avaliação: " + s.getAvaliacao()));
+    }
+
+    private void buscarSeriePorCategoria() {
+        System.out.println("Deseja buscar séries de qual categoria/gênero? ");
+        var nomeGenero = leitura.nextLine();
+        Categoria categoria = Categoria.fromPortugues(nomeGenero);
+        List<Serie> seriesPorCategoria = repository.findByGenero(categoria);
+        System.out.println("Séries da categoria " + nomeGenero);
+        seriesPorCategoria.forEach(System.out::println);
     }
 
 }
